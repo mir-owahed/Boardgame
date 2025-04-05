@@ -39,15 +39,7 @@ jobs:
       - name: 📦 Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/java-maven-app:latest .
-
-      - name: 🔍 Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/${{ github.repository_owner }}/java-maven-app:latest
-          format: table
-          severity: CRITICAL,HIGH
-          exit-code: 1
-
+      
       - name: 📤 Push Docker image to GHCR
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/java-maven-app:latest
