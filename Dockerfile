@@ -1,4 +1,4 @@
-# Stage 1: Build stage using Maven
+# Stage 1: Build stage using Maven 
 FROM maven:3.8.3-openjdk-17-slim AS builder
 
 WORKDIR /app
