@@ -8,8 +8,7 @@ WORKDIR /workspace
 RUN apt-get update && apt-get install -y \
     maven \
     curl \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    git \    
 
 # Set up Jenkins agent environment variables
 ENV JENKINS_AGENT_HOME /workspace
