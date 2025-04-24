@@ -1,34 +1,28 @@
-# Stage 1: Build stage using Maven 
-FROM maven:3.8.3-openjdk-17-slim AS builder
+# Use OpenJDK 17 as the base image
+FROM openjdk:17-slim
 
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /workspace
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Install Maven (as an example for a common build tool)
+RUN apt-get update && apt-get install -y \
+    maven \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy rest of the app source
-COPY src ./src
+# Set up Jenkins agent environment variables
+ENV JENKINS_AGENT_HOME /workspace
+ENV JENKINS_AGENT_NAME jenkins-agent
 
-# Build the application
-RUN mvn package -DskipTests
+# Install Docker (if needed for Docker-in-Docker or running Docker commands from within the container)
+RUN curl -fsSL https://get.docker.com | sh
 
-# Stage 2: Runtime stage using Alpine and non-root user
-FROM eclipse-temurin:17-jre-alpine
+# Allow Jenkins agent to run Docker commands (mount Docker socket later in the pipeline)
+RUN groupadd docker && useradd -m -g docker docker
 
-WORKDIR /app
+# Set the user as the 'docker' user
+USER docker
 
-# Create non-root user and group
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-
-# Copy the built JAR from the builder stage
-COPY --from=builder /app/target/*.jar app.jar
-
-# Change ownership and switch to non-root user
-RUN chown -R appuser:appgroup /app
-USER appuser
-
-# Expose app port
-EXPOSE 8080
-
-# Run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Default command (this will be overridden in Jenkins)
+CMD ["tail", "-f", "/dev/null"]
