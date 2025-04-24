@@ -10,9 +10,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \    
 
-# Set up Jenkins agent environment variables
-ENV JENKINS_AGENT_HOME /workspace
-ENV JENKINS_AGENT_NAME jenkins-agent
 
 # Install Docker (if needed for Docker-in-Docker or running Docker commands from within the container)
 RUN curl -fsSL https://get.docker.com | sh
