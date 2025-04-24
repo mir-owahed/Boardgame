@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = 'owahed1/boardgame-app'
+        IMAGE_NAME = 'owahed1/maven-mir-docker-agent'
     }
 
     stages {
@@ -36,7 +36,7 @@ pipeline {
                 sh '''
                     docker --version
                     docker build -t $IMAGE_NAME:$GIT_TAG .
-                    docker tag $IMAGE_NAME:$GIT_TAG $IMAGE_NAME:latest
+                    docker tag $IMAGE_NAME:$GIT_TAG $IMAGE_NAME:v1
                 '''
             }
         }
@@ -47,7 +47,7 @@ pipeline {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         docker push $IMAGE_NAME:$GIT_TAG
-                        docker push $IMAGE_NAME:latest
+                        docker push $IMAGE_NAME:v1
                     '''
                 }
             }
