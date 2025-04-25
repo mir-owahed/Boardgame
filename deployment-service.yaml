@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: boardgame
-          image: owahed1/boardgame-app:
+          image: owahed1/boardgame-app:81ed128
           imagePullPolicy: Always
           ports:
             - containerPort: 8080 # The port that the container is running on in the cluster
